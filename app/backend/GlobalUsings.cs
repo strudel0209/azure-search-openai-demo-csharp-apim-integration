@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 global using System.Diagnostics;
+global using Azure;
 global using System.Runtime.CompilerServices;
 global using System.Text.Json;
 global using Azure.AI.FormRecognizer.DocumentAnalysis;

@@ -37,18 +37,22 @@ public class ReadRetrieveReadChatService
             kernelBuilder = kernelBuilder.AddOpenAITextEmbeddingGeneration(embeddingModelName, client);
         }
         else
-        {
-            var deployedModelName = configuration["AzureOpenAiChatGptDeployment"];
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(deployedModelName);
-            var embeddingModelName = configuration["AzureOpenAiEmbeddingDeployment"];
-            if (!string.IsNullOrEmpty(embeddingModelName))
-            {
-                var endpoint = configuration["AzureOpenAiServiceEndpoint"];
-                ArgumentNullException.ThrowIfNullOrWhiteSpace(endpoint);
-                kernelBuilder = kernelBuilder.AddAzureOpenAITextEmbeddingGeneration(embeddingModelName, endpoint, tokenCredential ?? new DefaultAzureCredential());
-                kernelBuilder = kernelBuilder.AddAzureOpenAIChatCompletion(deployedModelName, endpoint, tokenCredential ?? new DefaultAzureCredential());
-            }
-        }
+{
+    var deployedModelName = configuration["AzureOpenAiChatGptDeployment"];
+    ArgumentNullException.ThrowIfNullOrWhiteSpace(deployedModelName);
+    var embeddingModelName = configuration["AzureOpenAiEmbeddingDeployment"];
+    if (!string.IsNullOrEmpty(embeddingModelName))
+    {
+        var endpoint = configuration["AzureOpenAiServiceEndpoint"];
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(endpoint);
+        
+        var azureOpenAIKey = configuration["AzureOpenAIKey"];
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(azureOpenAIKey);
+
+        kernelBuilder = kernelBuilder.AddAzureOpenAITextEmbeddingGeneration(embeddingModelName, endpoint, azureOpenAIKey);
+        kernelBuilder = kernelBuilder.AddAzureOpenAIChatCompletion(deployedModelName, endpoint, azureOpenAIKey);
+    }
+}
 
         _kernel = kernelBuilder.Build();
         _configuration = configuration;
